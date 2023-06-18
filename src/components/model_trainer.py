@@ -3,8 +3,7 @@ import sys
 import pandas as pd
 from src.logger import logging
 from src.exception import Custum_exception
-from src.components import DataIngestion 
-
+from src.components.data_ingestion import DataIngestion
 import numpy as np
 
 from src.utils import load_object
@@ -32,8 +31,9 @@ class ModelTrainer:
                 train_array[:,:-1],
                 train_array[:,-1],
                 test_array[:,:-1],
-                test_array[:,:-1]
+                test_array[:,-1]
             )
+            logging.info('Shapes of out put {},{},{},{}'.format(X_train.shape,y_train.shape,X_test.shape,y_test.shape))
 
             models={
             'LinearRegression':LinearRegression(),

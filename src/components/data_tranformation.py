@@ -1,8 +1,11 @@
 from sklearn.impute import SimpleImputer
-import pandas as pd
-import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OrdinalEncoder
+
+
+import pandas as pd
+import numpy as np
+
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 
@@ -29,6 +32,7 @@ class DataTransformation:
     def get_data_transformation_object(self):
         try:
             logging.info('data transformation initiated')
+
             categorical_cols = ['cut', 'color','clarity']
             numerical_cols = ['carat', 'depth','table', 'x', 'y', 'z']
 
@@ -37,15 +41,16 @@ class DataTransformation:
             color_categories = ['D', 'E', 'F', 'G', 'H', 'I', 'J']
             clarity_categories = ['I1','SI2','SI1','VS2','VS1','VVS2','VVS1','IF']
             logging.info('pipeline initiated')
+
             num_pipeline = Pipeline(
                 steps=[
-                    ('simple imputer',SimpleImputer(strategy='mdedian')),
+                    ('simple imputer',SimpleImputer(strategy='median')),
                     ('standard scaling',StandardScaler())
                 ]
             )
             cat_pipeline = Pipeline(
                 steps=[
-                    ('simple imputer',SimpleImputer(strategy='most frequent')),
+                    ('simple imputer',SimpleImputer(strategy='most_frequent')),
                     ('ordinal encoding',OrdinalEncoder(categories=[cut_categories,color_categories,clarity_categories])),
                     ('standard scaler',StandardScaler())
                 ]
@@ -80,10 +85,10 @@ class DataTransformation:
             target_column = 'price'
             drop_columns = [target_column,'id']
 
-            input_feature_train_df = train_df.drop(columns=target_column,axis=1)
+            input_feature_train_df = train_df.drop(columns=drop_columns,axis=1)
             target_feature_train_df = train_df[target_column]
 
-            input_feature_test_df = test_df.drop(columns=target_column,axis=1)
+            input_feature_test_df = test_df.drop(columns=drop_columns,axis=1)
             target_feature_test_df = test_df[target_column]
 
             logging.info("Applying preprocessing object on training and testing datasets.")
